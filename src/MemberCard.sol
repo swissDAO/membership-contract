@@ -90,7 +90,7 @@ contract MemberCard is
         uint256 amount,
         uint256 batchSize
     ) internal override(ERC721, ERC721Enumerable) {
-        return ERC721._beforeTokenTransfer(from, to, amount, batchSize);
+        return super._beforeTokenTransfer(from, to, amount, batchSize);
     }
 
     function _burn(uint256 tokenId)
