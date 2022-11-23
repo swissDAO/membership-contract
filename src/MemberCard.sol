@@ -11,7 +11,6 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./interfaces/IMemberCard.sol";
 
 contract MemberCard is
-    IMemberCard,
     AccessControl,
     ERC721URIStorage,
     ERC721Enumerable,
@@ -88,9 +87,10 @@ contract MemberCard is
     function _beforeTokenTransfer(
         address from,
         address to,
-        uint256 amount
+        uint256 amount,
+        uint256 batchSize
     ) internal override(ERC721, ERC721Enumerable) {
-        return;
+        return ERC721._beforeTokenTransfer(from, to, amount, batchSize);
     }
 
     function _burn(uint256 tokenId)
