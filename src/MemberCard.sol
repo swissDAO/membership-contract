@@ -25,8 +25,14 @@ contract MemberCard is
         PLATINUM
     }
 
-    struct Skills {
+    struct Skill {
         string name;
+        uint256 xp;
+    }
+
+    struct Badge {
+        string name;
+        address token;
     }
 
     struct Attributes {
@@ -34,7 +40,8 @@ contract MemberCard is
         string name;
         uint256 mintDate;
         uint256 lastModified;
-        Skills[] skills;
+        Skill[] skills;
+        Badge[] badges;
         TIERS tier;
     }
 
@@ -52,7 +59,8 @@ contract MemberCard is
     constructor(address _dispatcher, string memory _name)
         ERC721("MemberCard", "SWSS")
     {
-        Skills[] memory initalSkills;
+        Skill[] memory initalSkills;
+        Badge[] memory initalBadges;
 
         Attributes memory _holdersAttributes = Attributes(
             msg.sender,
@@ -60,6 +68,7 @@ contract MemberCard is
             block.timestamp,
             block.timestamp,
             initalSkills,
+            initalBadges,
             TIERS.BRONZE
         );
 
