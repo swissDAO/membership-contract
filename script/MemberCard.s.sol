@@ -9,7 +9,7 @@ contract MemberCardScript is Script {
 
     function run() public {
         vm.broadcast();
-        new MemberCard(0x0000000000000000000000000000000000000000, "Joe Doe");
+        new MemberCard(0x0000000000000000000000000000000000000000);
         vm.stopBroadcast();
     }
 }
