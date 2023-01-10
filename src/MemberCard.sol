@@ -29,7 +29,7 @@ contract MemberCard is
 
     mapping(address => Attributes) public holdersAttributes;
 
-    constructor(address _dispatcher) ERC721("MemberCard", "SWSS") {
+    constructor(address _dispatcher) ERC721("MemberCard", "swissDAO") {
         DISPATCHER_ADDRESS = _dispatcher;
 
         _grantRole(DEFAULT_ADMIN_ROLE, _dispatcher);
@@ -49,22 +49,14 @@ contract MemberCard is
 
         _setTokenURI(newItemId, tokenURI(newItemId));
 
-        Skill[] memory initalSkills;
-        Badge[] memory initalBadges;
-
-        Attributes memory _holdersAttributes = Attributes(
-            msg.sender,
-            _name,
-            block.timestamp,
-            block.timestamp,
-            block.timestamp + 90 days,
-            100,
-            initalSkills,
-            initalBadges,
-            TIERS.BRONZE
-        );
-
-        holdersAttributes[msg.sender] = _holdersAttributes;
+        holdersAttributes[msg.sender].holder = msg.sender;
+        holdersAttributes[msg.sender].name = _name;
+        holdersAttributes[msg.sender].mintDate = block.timestamp;
+        holdersAttributes[msg.sender].lastModified = block.timestamp;
+        holdersAttributes[msg.sender].timeUntilDegradation =
+            block.timestamp +
+            90 days;
+        holdersAttributes[msg.sender].tier = TIERS.BRONZE;
 
         _tokenIds.increment();
 
@@ -143,8 +135,7 @@ contract MemberCard is
         override(ERC721, ERC721URIStorage)
         returns (string memory)
     {
-        return
-            "https://gateway.pinata.cloud/ipfs/QmRj91zjBaMjUHtxJnGh32UvM6Wtd4fXNXt8czABLuuCsE";
+        return "ipfs://QmRj91zjBaMjUHtxJnGh32UvM6Wtd4fXNXt8czABLuuCsE";
     }
 
     function supportsInterface(bytes4 interfaceId)

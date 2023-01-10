@@ -8,7 +8,6 @@ import "./interfaces/IMemberCard.sol";
 import "./MemberCard.sol";
 
 contract Dispatcher is IMemberCard, IDispatcher, Ownable {
-
     MemberCard memberCard;
 
     struct Member {
@@ -28,7 +27,12 @@ contract Dispatcher is IMemberCard, IDispatcher, Ownable {
     mapping(uint256 => Member) public eventToAttendees;
     mapping(uint256 => bytes32) private eventIdToEventSecret;
 
-    event EventCreated(address indexed _owner, uint256 _id, string _title, uint256 _timestampOfEvent);
+    event EventCreated(
+        address indexed _owner,
+        uint256 _id,
+        string _title,
+        uint256 _timestampOfEvent
+    );
 
     constructor(address _memberCard) {
         memberCard = MemberCard(_memberCard);
@@ -67,85 +71,87 @@ contract Dispatcher is IMemberCard, IDispatcher, Ownable {
     //     idToEvents[eventCount] = swissDAOEvent;
 
     //     emit EventCreated(msg.sender, swissDAOEvent.id, swissDAOEvent.title, swissDAOEvent.timestampOfEvent);
-    }
 
-    // function updateEvent(
-    //     uint256 _EventId,
-    //     string memory _newTitle,
-    //     uint256 _timestampOFEvent
-    // ) public {
-    //     // require owner calls this function
-
-    //     Event memory swissDAOEventCopy = idToEvents[_EventId];
-
-    //     require(
-    //         msg.sender == swissDAOEventCopy.owner,
-    //         "You are not the owner of this event"
-    //     );
-
-    //     Event memory swissDAOEvent = Event({
-    //         title: _newTitle,
-    //         id: _EventId,
-    //         timestampOfEvent: _timestampOFEvent,
-    //         owner: swissDAOEventCopy.owner,
-    //         maxAttendees: swissDAOEventCopy.maxAttendees,
-    //         //attendees: swissDAOEventCopy.attendees,
-    //         hashes: swissDAOEventCopy.hashes
-    //     });
-
-    //     //eventToAttendees[swissDAOEventCopy.id] = swissDAOEventCopy.
-
-    //     idToEvents[_EventId] = swissDAOEvent;
-    // }
-
-    // function iWasHere(
-    //     uint256 _eventID,
-    //     address _attendee,
-    //     bytes32 _secret
-    // ) external {
-    //     // require certain token for this to work, token receiving via qr code scanning
-    //     bool validSecretDetected;
-
-    //     Event storage swissDAOEvent = idToEvents[_eventID];
-
-    //     for (uint256 i = 0; i < swissDAOEvent.maxAttendees; i++) {
-    //         bytes32 _hash = swissDAOEvent.hashes[i];
-    //         if (_hash == keccak256(abi.encodePacked(_secret))) {
-    //             // remove hash from list
-    //             require(i < swissDAOEvent.hashes.length);
-    //             swissDAOEvent.hashes[i] = swissDAOEvent.hashes[
-    //                 swissDAOEvent.hashes.length - 1
-    //             ];
-    //             swissDAOEvent.hashes.pop();
-    //             // swissDAOEvent.hashes
-    //             validSecretDetected = true;
-    //             break;
-    //         }
-    //     }
-
-    //     //require(validSecretDetected, "You don't have a valid secret.");
-
-    //     // actual mint / upgrade
-    //     bool _bool = addressIsMember[_attendee];
-    //     if (_bool) {
-    //         // already member => just upgrade
-    //     } else {
-    //         // no member yet => mint membership NFT with initial xp points
-    //         memberCount++;
-    //         uint256 id = memberCard.mint("");
-    //         addressIsMember[msg.sender] = true;
-    //         addressToMember[msg.sender] = Member({member: msg.sender, tokenId: id});
-    //     }
-    // }
-
-    function updateMembercardFields(uint[] calldata _arr) public {}
+    function updateMembercardFields(uint256[] calldata _arr) public {}
 
     function addMembership(uint256 _tokenId) public {
         addressIsMember[msg.sender] = true;
-        addressToMember[msg.sender] = Member({member: msg.sender, tokenId: _tokenId});
+        addressToMember[msg.sender] = Member({
+            member: msg.sender,
+            tokenId: _tokenId
+        });
     }
 
     function createMember() public {
         // require certain token for this to work, token receiving via qr code scanning
     }
 }
+
+// function updateEvent(
+//     uint256 _EventId,
+//     string memory _newTitle,
+//     uint256 _timestampOFEvent
+// ) public {
+//     // require owner calls this function
+
+//     Event memory swissDAOEventCopy = idToEvents[_EventId];
+
+//     require(
+//         msg.sender == swissDAOEventCopy.owner,
+//         "You are not the owner of this event"
+//     );
+
+//     Event memory swissDAOEvent = Event({
+//         title: _newTitle,
+//         id: _EventId,
+//         timestampOfEvent: _timestampOFEvent,
+//         owner: swissDAOEventCopy.owner,
+//         maxAttendees: swissDAOEventCopy.maxAttendees,
+//         //attendees: swissDAOEventCopy.attendees,
+//         hashes: swissDAOEventCopy.hashes
+//     });
+
+//     //eventToAttendees[swissDAOEventCopy.id] = swissDAOEventCopy.
+
+//     idToEvents[_EventId] = swissDAOEvent;
+// }
+
+// function iWasHere(
+//     uint256 _eventID,
+//     address _attendee,
+//     bytes32 _secret
+// ) external {
+//     // require certain token for this to work, token receiving via qr code scanning
+//     bool validSecretDetected;
+
+//     Event storage swissDAOEvent = idToEvents[_eventID];
+
+//     for (uint256 i = 0; i < swissDAOEvent.maxAttendees; i++) {
+//         bytes32 _hash = swissDAOEvent.hashes[i];
+//         if (_hash == keccak256(abi.encodePacked(_secret))) {
+//             // remove hash from list
+//             require(i < swissDAOEvent.hashes.length);
+//             swissDAOEvent.hashes[i] = swissDAOEvent.hashes[
+//                 swissDAOEvent.hashes.length - 1
+//             ];
+//             swissDAOEvent.hashes.pop();
+//             // swissDAOEvent.hashes
+//             validSecretDetected = true;
+//             break;
+//         }
+//     }
+
+//     //require(validSecretDetected, "You don't have a valid secret.");
+
+//     // actual mint / upgrade
+//     bool _bool = addressIsMember[_attendee];
+//     if (_bool) {
+//         // already member => just upgrade
+//     } else {
+//         // no member yet => mint membership NFT with initial xp points
+//         memberCount++;
+//         uint256 id = memberCard.mint("");
+//         addressIsMember[msg.sender] = true;
+//         addressToMember[msg.sender] = Member({member: msg.sender, tokenId: id});
+//     }
+// }

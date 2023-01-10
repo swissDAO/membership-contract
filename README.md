@@ -5,7 +5,7 @@
 | Contract      | Network | Contract address |
 | ------------- | ------- | ---------------- |
 | Dispatcher    | ?       | not deployed yet |
-| MembershipNFT | ?       | not deployed yet |
+| MembershipNFT | goerli      | 0xf2fa99322a359eF5De22944c7EdFe9BCb7769426 |
 
 ### Deploy contracts
 
