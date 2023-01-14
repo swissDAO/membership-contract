@@ -2,6 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
@@ -14,6 +15,7 @@ import "./Dispatcher.sol";
 contract MemberCard is
     IMemberCard,
     AccessControl,
+    Ownable,
     ERC721URIStorage,
     ERC721Enumerable,
     ERC721Burnable
@@ -61,6 +63,11 @@ contract MemberCard is
         _tokenIds.increment();
 
         return newItemId;
+    }
+
+    function updateMembercardAttributes(string memory _name) public onlyOwner {
+        // TODO add all attributes that can be updated through ui (name, cv, ...)
+        holdersAttributes[msg.sender].name = _name;
     }
 
     function earnExperience(Event memory _event) public onlyDispatcher {
