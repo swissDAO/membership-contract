@@ -1,5 +1,9 @@
 # Contracts
 
+## Local Setup
+
+Consolidate ```.env.local``` fill out ```.env```
+
 ## Deployed Contracts
 
 | Contract      | Network | Contract address |
@@ -13,7 +17,7 @@
 # To give our shell access to our environment variables
 source .env
 # To deploy and verify our contract
-forge script script/<scriptname>.s.sol:<contractname> --rpc-url $GOERLI_RPC_URL  --private-key $GOERLI_PRIVATE_KEY --broadcast
+forge script script/<scriptname>.s.sol:<contractname> --rpc-url goerli || mainnet --broadcast
 
 # concatenate the following if you want to verify the contract
 # --verify --etherscan-api-key $ETHERSCAN_API_KEY -vvvv
