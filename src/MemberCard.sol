@@ -21,24 +21,19 @@ contract MemberCard is
     ERC721Burnable
 {
     using Counters for Counters.Counter;
-
-    uint256 experiencePointsOverall;
-    uint256 numberOfAttendedEvents;
-
     Counters.Counter private _tokenIds;
-
-    address public DISPATCHER_ADDRESS;
 
     mapping(address => Attributes) public holdersAttributes;
 
-    constructor(address _dispatcher) ERC721("MemberCard", "swissDAO") {
-        DISPATCHER_ADDRESS = _dispatcher;
-
-        _grantRole(DEFAULT_ADMIN_ROLE, _dispatcher);
+    constructor(address _multisig) ERC721("MemberCard", "swissDAO") {
+        _grantRole(DEFAULT_ADMIN_ROLE, _multisig);
     }
 
     modifier onlyDispatcher() {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "NOT_DISPATCHER");
+        require(
+            hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            "NOT_DEFAULT_ADMIN_ROLE"
+        );
         _;
     }
 
@@ -55,10 +50,9 @@ contract MemberCard is
         holdersAttributes[msg.sender].name = _name;
         holdersAttributes[msg.sender].mintDate = block.timestamp;
         holdersAttributes[msg.sender].lastModified = block.timestamp;
-        holdersAttributes[msg.sender].timeUntilDegradation =
-            block.timestamp +
-            90 days;
-        holdersAttributes[msg.sender].tier = TIERS.BRONZE;
+        holdersAttributes[msg.sender].experiencePoints = 0;
+        holdersAttributes[msg.sender].activityPoints = 0;
+        holdersAttributes[msg.sender].attendedEvents = 0;
 
         _tokenIds.increment();
 
@@ -72,50 +66,19 @@ contract MemberCard is
 
     function earnExperience(Event memory _event) public onlyDispatcher {
         Attributes storage _holdersAttributes = holdersAttributes[msg.sender];
-
-        Skill memory skill;
-
-        for (uint256 x = 0; x < _holdersAttributes.skills.length; x++) {
-            for (uint256 y = 0; y < _event.skills.length; y++) {
-                if (
-                    keccak256(
-                        abi.encodePacked(_holdersAttributes.skills[x].name)
-                    ) == keccak256(abi.encodePacked(_event.skills[y].name))
-                ) {
-                    skill = _holdersAttributes.skills[x];
-                } else {}
-            }
-
-            _holdersAttributes.skills.push(skill);
-        }
+        _holdersAttributes.experiencePoints++;
+        _holdersAttributes.activityPoints++;
+        _holdersAttributes.attendedEvents++;
     }
 
-    function updateTier() internal onlyDispatcher {
-        Attributes storage _holdersAttributes = holdersAttributes[msg.sender];
-        _holdersAttributes.tier = getNextTierLevel(TIERS.BRONZE, false);
-    }
-
-    function updateSkills(Skill memory _skill) internal onlyDispatcher {
-        Attributes storage _holdersAttributes = holdersAttributes[msg.sender];
-        _holdersAttributes.skills.push(_skill);
-    }
-
-    function updateBadges(Badge memory _badge) internal onlyDispatcher {
-        Attributes storage _holdersAttributes = holdersAttributes[msg.sender];
-        _holdersAttributes.badges.push(_badge);
-    }
-
-    function getNextTierLevel(TIERS _newTier, bool isDegrading)
-        internal
-        returns (TIERS)
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
     {
-        for (uint256 index = 1; index < 4; index++) {
-            if (isDegrading) {
-                index--;
-            }
-
-            return TIERS.BRONZE;
-        }
+        return "ipfs://QmRj91zjBaMjUHtxJnGh32UvM6Wtd4fXNXt8czABLuuCsE";
     }
 
     // Override functions
@@ -133,16 +96,6 @@ contract MemberCard is
         override(ERC721, ERC721URIStorage)
     {
         ERC721._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        virtual
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return "ipfs://QmRj91zjBaMjUHtxJnGh32UvM6Wtd4fXNXt8czABLuuCsE";
     }
 
     function supportsInterface(bytes4 interfaceId)

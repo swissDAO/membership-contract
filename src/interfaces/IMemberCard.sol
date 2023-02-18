@@ -27,11 +27,9 @@ interface IMemberCard {
         string name;
         uint256 mintDate;
         uint256 lastModified;
-        uint256 timeUntilDegradation;
-        uint256 degradation; // 100 - 0
-        Skill[] skills;
-        Badge[] badges;
-        TIERS tier;
+        uint256 experiencePoints;
+        uint256 activityPoints;
+        uint256 attendedEvents;
     }
 
     struct Event {
