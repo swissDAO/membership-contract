@@ -81,13 +81,17 @@ contract MemberCard is
         return "ipfs://QmRj91zjBaMjUHtxJnGh32UvM6Wtd4fXNXt8czABLuuCsE";
     }
 
-    // Override functions
     function _beforeTokenTransfer(
         address from,
         address to,
         uint256 firstTokenId,
         uint256 batchSize
-    ) internal override(ERC721, ERC721Enumerable) {
+    ) internal override(ERC721, ERC721Enumerable) onlyOwner {
+        require(
+            from == address(0) || to == address(0),
+            "This a Soulbound token. It cannot be transferred. It can only be burned by the token owner."
+        );
+
         super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
     }
 
