@@ -20,7 +20,7 @@ source .env
 forge script script/<scriptname>.s.sol:<contractname> --rpc-url goerli || mainnet --broadcast
 
 # concatenate the following if you want to verify the contract
-# --verify --etherscan-api-key $ETHERSCAN_API_KEY -vvvv
+# --verify -vvvv
 
 ```
 
